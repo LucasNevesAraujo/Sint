@@ -1,6 +1,6 @@
 {
   "name": "sint",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A Spreadsheet language interpreter",
   "main": "./lib/index.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "docs": "jsdoc src -r -c scripts/jsdoc.conf.json -d docs -R README.md",
     "dist": "mkdir -p ./dist && npm run babel && npm run browserify",
     "babel": "babel src -d lib",
-    "browserify": "browserify lib/index.js -t [ babelify --comments false ] -t uglifyify --outfile dist/sint.min.js"
+    "browserify": "browserify lib/index.js -t [ babelify --comments false ] -t uglifyify --outfile dist/sint.min.js",
+    "publish": "git checkout release && npm run dist && npm publish ./"
   },
   "repository": {
     "type": "git",
