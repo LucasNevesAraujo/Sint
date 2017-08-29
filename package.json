@@ -21,6 +21,12 @@
     "spreadsheet",
     "es6"
   ],
+  "files": [
+    "dist/",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
   "author": "Lucas Araujo <araujo.lucas@gmail.com>",
   "license": "MIT",
   "bugs": {
