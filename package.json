@@ -1,8 +1,8 @@
 {
   "name": "sint",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Spreadsheet language interpreter",
-  "main": "index.js",
+  "main": "./dist/sint.min.js",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register",
     "docs": "jsdoc src -r -c scripts/jsdoc.conf.json -d docs -R README.md",
@@ -21,6 +21,7 @@
     "spreadsheet",
     "es6"
   ],
+  "readme": "README.md",
   "files": [
     "dist/",
     "LICENSE",
