@@ -1,12 +1,12 @@
 {
   "name": "sint",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Spreadsheet language interpreter",
-  "main": "./dist/sint.min.js",
+  "main": "./lib/index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register",
     "docs": "jsdoc src -r -c scripts/jsdoc.conf.json -d docs -R README.md",
-    "dist": "npm run babel && npm run browserify",
+    "dist": "mkdir -p ./dist && npm run babel && npm run browserify",
     "babel": "babel src -d lib",
     "browserify": "browserify lib/index.js -t [ babelify --comments false ] -t uglifyify --outfile dist/sint.min.js"
   },
@@ -24,6 +24,7 @@
   "readme": "README.md",
   "files": [
     "dist/",
+    "lib/",
     "LICENSE",
     "package.json",
     "README.md"
