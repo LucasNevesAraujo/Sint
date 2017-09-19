@@ -14,7 +14,7 @@
           <h1>Sint</h1>
           <p>A Spreadsheet language interpreter</p>
           <label for="code">Put your code here</label>
-          <textarea class="form-control" name="code" id="code" cols="30" rows="10">=1 + POW(2,3)</textarea>
+          <input type="text" class="form-control" name="code" id="code" value="=1 + POW(2,3)">
           <br/>
           <p class="text-right"><button type="button" id="executeButton" class="btn btn-primary">Execute</button></p>
           <p>Result:</p>
@@ -26,17 +26,27 @@
     <script src="../dist/sint.min.js"></script>
     <script>
       var interpreter = new Sint.Interpreter();
-      var textarea = document.getElementById('code');
+      var input = document.getElementById('code');
       var pre = document.getElementById('result');
       var button = document.getElementById('executeButton');
 
       function executeCode()
       {
-        var code = textarea.value;
+        var code = input.value;
         var result = interpreter.run(code);
 
         pre.innerHTML = result;
       }
+
+
+      input.addEventListener('keypress', function (e)
+      {
+        var key = e.which || e.keyCode;
+        if (key === 13)
+        {
+          executeCode();
+        }
+      });
 
       button.addEventListener('click', executeCode, false);
       executeCode();
