@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <title>Sint example</title>
+    <title>Sint examples</title>
   </head>
   <body>
     <div class="container">
@@ -13,44 +13,14 @@
         <div class="col-md-12">
           <h1>Sint</h1>
           <p>A Spreadsheet language interpreter</p>
-          <label for="code">Put your code here</label>
-          <input type="text" class="form-control" name="code" id="code" value="=1 + POW(2,3)">
-          <br/>
-          <p class="text-right"><button type="button" id="executeButton" class="btn btn-primary">Execute</button></p>
-          <p>Result:</p>
-          <pre id="result"></pre>
+
+          <h2>Examples:</h2>
+          <ul class="list-unstyled">
+            <li><a href="./example01.html">Example 01 - Basic input</a></li>
+            <li><a href="./example02.html">Example 02 - Spreadsheet</a></li>
+          </ul>
         </div>
       </div>
     </div>
-
-    <script src="../dist/sint.min.js"></script>
-    <script>
-      var interpreter = new Sint.Interpreter();
-      var input = document.getElementById('code');
-      var pre = document.getElementById('result');
-      var button = document.getElementById('executeButton');
-
-      function executeCode()
-      {
-        var code = input.value;
-        var result = interpreter.run(code);
-
-        pre.innerHTML = result;
-      }
-
-
-      input.addEventListener('keypress', function (e)
-      {
-        var key = e.which || e.keyCode;
-        if (key === 13)
-        {
-          executeCode();
-        }
-      });
-
-      button.addEventListener('click', executeCode, false);
-      executeCode();
-
-    </script>
   </body>
 </html>
