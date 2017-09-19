@@ -48,7 +48,7 @@ export default class CellIdentifier extends AST
     /**
      * From Column string to number. Example: AA => 27
      * Based on: https://stackoverflow.com/questions/12699030/implement-numbering-scheme-like-a-b-c-aa-ab-aaa-similar-to-converting-a-num
-     * @param {*} str - Column string
+     * @param {string} str - Column string
      * @return {number} Column number
      */
     static toDecimal(str)
@@ -62,5 +62,32 @@ export default class CellIdentifier extends AST
         }
 
         return decimal;
+    }
+
+    /**
+     * From Column number to string. Example: 27 => AA
+     * Based on: https://stackoverflow.com/questions/12699030/implement-numbering-scheme-like-a-b-c-aa-ab-aaa-similar-to-converting-a-num
+     * @param {number} value - Column number
+     * @return {string} Column string
+     */
+    static toLetters(value)
+    {
+        const digits = [
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+            'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+            'U', 'V', 'W', 'X', 'Y', 'Z',
+        ];
+        const result = [];
+
+        value = value - 1;
+        if (value === 0) { return digits[0]; }
+
+        while (value >= 0)
+        {
+            result.unshift(digits[value % 26]);
+            value = Math.floor(value / 26) - 1;
+        }
+
+        return result.join('');
     }
 }

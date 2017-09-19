@@ -7,3 +7,4 @@ export { default as Interpreter } from './Interpreter';
 export { default as DataGrid } from './DataGrid';
 export { default as Position } from './Position';
 export { default as Range } from './Range';
+export * from './ast';

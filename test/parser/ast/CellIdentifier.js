@@ -49,6 +49,19 @@ describe('CellIdentifier', () =>
             expect(CellIdentifier.toDecimal('E')).to.be.equal(5);
             expect(CellIdentifier.toDecimal('AA')).to.be.equal(27);
             expect(CellIdentifier.toDecimal('AZ')).to.be.equal(52);
+            expect(CellIdentifier.toDecimal('ZAG')).to.be.equal(17609);
+        });
+    });
+
+    describe('toLetters', () =>
+    {
+        it('should return correct string from numbers', () =>
+        {
+            expect(CellIdentifier.toLetters(1)).to.be.equal('A');
+            expect(CellIdentifier.toLetters(5)).to.be.equal('E');
+            expect(CellIdentifier.toLetters(27)).to.be.equal('AA');
+            expect(CellIdentifier.toLetters(52)).to.be.equal('AZ');
+            expect(CellIdentifier.toLetters(17609)).to.be.equal('ZAG');
         });
     });
 });
