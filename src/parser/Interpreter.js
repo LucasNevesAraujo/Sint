@@ -1,7 +1,7 @@
 import Lexer from './Lexer';
 import Parser from './Parser';
 import DataGrid from './DataGrid';
-import { AST } from './AST';
+import { AST } from './ast';
 import { TOKENS, OP_FUNCTIONS, FUNCTIONS } from './../Constants';
 import NodeVisitor from './NodeVisitor';
 

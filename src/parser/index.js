@@ -5,3 +5,5 @@ export { default as Parser } from './Parser';
 export { default as NodeVisitor } from './NodeVisitor';
 export { default as Interpreter } from './Interpreter';
 export { default as DataGrid } from './DataGrid';
+export { default as Position } from './Position';
+export { default as Range } from './Range';

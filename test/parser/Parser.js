@@ -10,7 +10,7 @@ import {
     NumberConstant,
     StringConstant,
     BooleanConstant,
-} from '../../src/parser/AST';
+} from '../../src/parser/ast';
 
 describe('Parser', () =>
 {

@@ -11,7 +11,7 @@ import {
     StringConstant,
     BooleanConstant,
     ErrorConstant,
-} from './AST';
+} from './ast';
 
 /**
  * Syntax analyzer
