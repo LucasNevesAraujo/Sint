@@ -16,7 +16,18 @@
           <br />
 
           <table class="table table-bordered"></table>
-          <p class="text-right"><button type="button" class="btn btn-primary">Clear</button></p>
+          <p class="text-right">
+            <button type="button" id="toggle" class="btn btn-default">Toggle type</button>
+            <button type="button" id="clear" class="btn btn-primary">Clear</button>
+          </p>
+
+          <ul class="list-unstyled type-list">
+            <li><div class="dot null"></div> Empty</li>
+            <li><div class="dot string"></div> String</li>
+            <li><div class="dot number"></div> Number</li>
+            <li><div class="dot boolean"></div> Boolean</li>
+            <li><div class="dot array"></div> Array</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -33,7 +44,7 @@
         padding: 8px;
       }
       input.form-control {
-        border: none;
+        border: 1px solid white;
         box-shadow: none;
         border-radius: 0px;
       }
@@ -45,6 +56,30 @@
       }
       input.form-control:not(:focus) {
         text-align: right;
+      }
+      .show-types .array {
+        border-color: black;
+      }
+      .show-types .string {
+        border-color: blue;
+      }
+      .show-types .number {
+        border-color: green;
+      }
+      .show-types .boolean {
+        border-color: red;
+      }
+      .type-list {
+        display: none;
+      }
+      .show-types .type-list {
+        display: block;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        border: 1px solid #ddd;
       }
     </style>
 
@@ -83,11 +118,12 @@
         return result;
       }
 
-      CellGrid.prototype.save = function(id, value, output)
+      CellGrid.prototype.save = function(id, value, output, type)
       {
         localStorage[id] = JSON.stringify({
           value: value,
-          output: output
+          output: output,
+          type: type
         });
       }
 
@@ -100,13 +136,16 @@
 
         return {
           value: '',
-          output: ''
+          output: null,
+          type: 'null'
         }
       }
 
       var interpreter = new Sint.Interpreter();
       var table = document.querySelector('table');
-      var button = document.querySelector('button');
+      var body = document.querySelector('body');
+      var clearButton = document.getElementById('clear');
+      var toggleButton = document.getElementById('toggle');
       var rows = 8;
       var cols = 6;
       var inputs;
@@ -143,11 +182,7 @@
 
           input.addEventListener('blur', function(e)
           {
-            if (input.value)
-            {
-              cellGrid.save(e.target.id, input.value, interpreter.run(input.value));
-            }
-
+            cellGrid.save(e.target.id, input.value, interpreter.run(input.value));
             computeAll();
           });
 
@@ -166,26 +201,48 @@
       {
         inputs.forEach(function (input)
         {
-          var output = '';
+          var output = null;
+          var type = 'null';
 
           if (localStorage[input.id])
           {
             var object = cellGrid.getObject(input.id);
 
             output = interpreter.run(object.value);
-            cellGrid.save(input.id, object.value, output);
+
+            if (output === null)
+            {
+              type = 'null';
+            }
+            else if (Array.isArray(output))
+            {
+              type = 'array';
+            }
+            else {
+              type = typeof output;
+            }
+
+            cellGrid.save(input.id, object.value, output, type);
           }
 
           input.value = output;
+
+          input.classList.remove('null', 'array', 'object', 'string', 'number', 'date', 'boolean');
+          input.classList.add(type);
         });
       }
 
       interpreter.data = cellGrid;
 
-      button.addEventListener('click', function()
+      clearButton.addEventListener('click', function()
       {
         localStorage.clear();
         computeAll();
+      });
+
+      toggleButton.addEventListener('click', function()
+      {
+        body.classList.toggle('show-types');
       });
 
       createTable(table, rows, cols);
