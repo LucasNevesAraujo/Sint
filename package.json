@@ -4,13 +4,12 @@
   "description": "A Spreadsheet language interpreter",
   "main": "./lib/index.js",
   "scripts": {
-    "start": "watch \"npm run dist\" babel",
+    "start": "watch \"npm run browserify\" ./src",
     "test": "mocha --compilers js:babel-core/register",
     "docs": "jsdoc src -r -c scripts/jsdoc.conf.json -d docs -R README.md",
-    "build": "mkdir -p ./dist && rimraf ./dist/*.* && npm run babel && npm run browserify",
+    "build": "mkdir -p ./dist && rimraf ./dist/*.* && npm run browserify",
     "dist": "npm run build && npm run minify",
-    "babel": "mkdir -p ./lib && rimraf ./lib && babel ./src -d ./lib",
-    "browserify": "browserify -d ./lib/index.js -t [ babelify --sourceMapsAbsolute --comments false ] --outfile ./dist/sint.js",
+    "browserify": "browserify -d ./src/index.js -t [ babelify --sourceMapsAbsolute --comments false ] --outfile ./dist/sint.js",
     "minify": "minify ./dist/sint.js --out-file ./dist/sint.min.js",
     "publish": "git checkout release && npm run dist && npm publish ./"
   },
