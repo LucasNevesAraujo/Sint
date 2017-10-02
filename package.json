@@ -1,8 +1,8 @@
 {
   "name": "sint",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A Spreadsheet language interpreter",
-  "main": "./lib/index.js",
+  "main": "./dist/sint.min.js",
   "scripts": {
     "start": "watch \"npm run browserify\" ./src",
     "test": "mocha --compilers js:babel-core/register",
@@ -27,7 +27,7 @@
   "readme": "README.md",
   "files": [
     "dist/",
-    "lib/",
+    "example/",
     "LICENSE",
     "package.json",
     "README.md"

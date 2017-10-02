@@ -19,9 +19,11 @@
           <p class="text-right"><button type="button" id="executeButton" class="btn btn-primary">Execute</button></p>
           <p>Result:</p>
           <pre id="result"></pre>
+          <p id="sint-version" class="text-center text-muted"></p>
         </div>
       </div>
     </div>
+
 
     <script src="../dist/sint.min.js"></script>
     <script>
@@ -29,6 +31,8 @@
       var input = document.getElementById('code');
       var pre = document.getElementById('result');
       var button = document.getElementById('executeButton');
+
+      document.getElementById('sint-version').innerHTML = "Sint@" + Sint.VERSION;
 
       function executeCode()
       {

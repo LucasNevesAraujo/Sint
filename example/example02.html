@@ -28,6 +28,7 @@
             <li><div class="dot boolean"></div> Boolean</li>
             <li><div class="dot array"></div> Array</li>
           </ul>
+          <p id="sint-version" class="text-center text-muted"></p>
         </div>
       </div>
     </div>
@@ -87,6 +88,8 @@
     <script>
 
       var CellGrid = function() {}
+
+      document.getElementById('sint-version').innerHTML = "Sint@" + Sint.VERSION;
 
       CellGrid.prototype.getValue = function(cell)
       {
