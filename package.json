@@ -11,6 +11,7 @@
     "dist": "npm run build && npm run minify",
     "browserify": "browserify -d ./src/index.js -t [ babelify --sourceMapsAbsolute --comments false ] --outfile ./dist/sint.js",
     "minify": "minify ./dist/sint.js --out-file ./dist/sint.min.js",
+    "lint": "eslint src/**",
     "publish": "git checkout release && npm run dist && npm publish ./"
   },
   "repository": {
