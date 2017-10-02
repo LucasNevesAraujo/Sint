@@ -185,5 +185,26 @@ describe('Parser', () =>
             parser.lexer = lexer;
             expect(parser.parse).to.throwError();
         });
+
+        describe('operator precedence', () => {
+            describe('^', () => {
+                it('should have higher precedence than multiplication', () => {
+                    let formula;
+
+                    formula = `= 4 * 2 ^ 7`;
+                    expect(parseText(formula)).to.be.eql(
+                        new BinOp(
+                            new NumberConstant(4),
+                            new Token(TOKENS.MULT, '*'),
+                            new BinOp(
+                                new NumberConstant(2),
+                                new Token(TOKENS.POW, '^'),
+                                new NumberConstant(7)
+                            )
+                        )
+                    );
+                });
+            });
+        });
     });
 });
