@@ -108,6 +108,6 @@ export default class Characters
      */
     isIdentifier()
     {
-        return (this.isAlpha() || this.isDigit() || (/^[\$\.]+$/).test(this.current));
+        return (this.isAlpha() || this.isDigit() || (/^[\_\$\.]+$/).test(this.current));
     }
 }
