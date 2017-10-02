@@ -93,6 +93,12 @@ export default class Characters
         return (/^[a-zA-Z]+$/).test(this.current);
     }
 
+    isUnicode()
+    {
+        // https://stackoverflow.com/questions/2124010/grep-regex-to-match-non-ascii-characters
+        return (/[^\x00-\x7F]+$/).test(this.current);
+    }
+
     /**
      * Returns true if the current character is a digit.
      * @return {boolean} True if is a digit.
@@ -108,6 +114,6 @@ export default class Characters
      */
     isIdentifier()
     {
-        return (this.isAlpha() || this.isDigit() || (/^[\_\$\.]+$/).test(this.current));
+        return (this.isAlpha() || this.isUnicode() || this.isDigit() || (/^[\_\$\.]+$/).test(this.current));
     }
 }

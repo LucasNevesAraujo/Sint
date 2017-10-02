@@ -42,6 +42,20 @@ describe('Characters', () =>
         });
     });
 
+    describe('isUnicode', () =>
+    {
+        it('should return true', () =>
+        {
+            const char = new Characters('à名ひ가🖐');
+
+            while (!char.end)
+            {
+                expect(char.isUnicode()).to.be.ok();
+                char.advance();
+            }
+        });
+    });
+
     describe('isDigit', () =>
     {
         it('should return true', () =>
