@@ -398,7 +398,7 @@ export default class Lexer extends Characters
             }
 
             // Get identifier
-            if (this.isAlpha() || this.current === UNDERSCORE || this.current === DOLLAR_SIGN)
+            if (this.isAlpha() || this.isUnicode() || this.current === UNDERSCORE || this.current === DOLLAR_SIGN)
             {
                 return this.identifier();
             }
