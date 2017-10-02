@@ -181,6 +181,11 @@ describe('Lexer', () =>
             lexer.next(); // Skip equal sign
             expect(lexer.next()).to.be.eql(new Token(TOKENS.SHEET, 'SHEET1'));
             expect(lexer.next()).to.be.eql(new Token(TOKENS.ID, 'A1'));
+
+            lexer.text = '=_Sheet1!A1';
+            lexer.next(); // Skip equal sign
+            expect(lexer.next()).to.be.eql(new Token(TOKENS.SHEET, '_SHEET1'));
+            expect(lexer.next()).to.be.eql(new Token(TOKENS.ID, 'A1'));
         });
 
         it('should return a cell or reference', () =>

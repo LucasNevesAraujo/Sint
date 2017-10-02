@@ -3,6 +3,7 @@ import Characters from './Characters';
 import Token from './Token';
 
 const START_CHAR = '=';
+const UNDERSCORE = '_';
 const DOLLAR_SIGN = '$';
 const SINGLE_QUOTE = '\'';
 const DOUBLE_QUOTE = '"';
@@ -397,7 +398,7 @@ export default class Lexer extends Characters
             }
 
             // Get identifier
-            if (this.isAlpha() || this.current === DOLLAR_SIGN)
+            if (this.isAlpha() || this.current === UNDERSCORE || this.current === DOLLAR_SIGN)
             {
                 return this.identifier();
             }
