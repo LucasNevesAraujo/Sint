@@ -28,7 +28,9 @@ import {
  *
  * addExp : mulExp ((PLUS | MINUS | CONCAT) mulExp)* ;
  *
- * mulExp : term ((MULT | DIV | EXP) term)* ;
+ * mulExp : expExp ((MULT | DIV) expExp)* ;
+ *
+ * expExp : term ((EXP) term)* ;
  *
  * term : (PLUS | MINUS) factor (PERCENT)? ;
  *
@@ -169,19 +171,43 @@ export default class Parser
     }
 
     /**
-     * Multiplication, division and Pow rule.
+     * Multiplication and division rule.
      *
      * @example <caption>Grammar:</caption>
      *
-     * mulExp : term ((MULT | DIV | EXP) term)* ;
+     * mulExp : expExp ((MULT | DIV) expExp)* ;
      *
      * @return {AST} Abstract Syntax tree.
      */
     mulExp()
     {
+        let node = this.expExp();
+
+        while ([TOKENS.MULT, TOKENS.DIV].includes(this.lookahead.type))
+        {
+            const token = this.lookahead;
+
+            this.match(token.type);
+            node = new BinOp(node, token, this.expExp());
+        }
+
+        return node;
+    }
+
+    /**
+     * Exponentiation rule.
+     *
+     * @example <caption>Grammar:</caption>
+     *
+     * expExp : term ((EXP) term)* ;
+     *
+     * @return {AST} Abstract Syntax tree.
+     */
+    expExp()
+    {
         let node = this.term();
 
-        while ([TOKENS.MULT, TOKENS.DIV, TOKENS.POW].includes(this.lookahead.type))
+        while ([TOKENS.POW].includes(this.lookahead.type))
         {
             const token = this.lookahead;
 
