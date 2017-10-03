@@ -7,8 +7,9 @@
     "start": "watch \"npm run browserify\" ./src",
     "test": "mocha --compilers js:babel-core/register",
     "docs": "jsdoc src -r -c scripts/jsdoc.conf.json -d docs -R README.md",
-    "build": "mkdir -p ./dist && rimraf ./dist/*.* && npm run browserify",
+    "build": "rimraf lib dist && npm run babel && mkdir dist && npm run browserify",
     "dist": "npm run build && npm run minify",
+    "babel": "babel src -d lib",
     "browserify": "browserify -d ./src/index.js -t [ babelify --sourceMapsAbsolute --comments false ] --outfile ./dist/sint.js",
     "minify": "minify ./dist/sint.js --out-file ./dist/sint.min.js",
     "lint": "eslint src/**"
@@ -26,6 +27,7 @@
   ],
   "readme": "README.md",
   "files": [
+    "lib/",
     "dist/",
     "example/",
     "LICENSE",
