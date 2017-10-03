@@ -207,6 +207,26 @@ describe('Parser', () =>
                     );
                 });
             });
+
+            describe('&', () =>
+            {
+                it('should have higher precedence than addition', () =>
+                {
+                    const formula = `= 4 & 2 + 7`;
+
+                    expect(parseText(formula)).to.be.eql(
+                        new BinOp(
+                            new NumberConstant(4),
+                            new Token(TOKENS.CONCAT, '&'),
+                            new BinOp(
+                                new NumberConstant(2),
+                                new Token(TOKENS.PLUS, '+'),
+                                new NumberConstant(7)
+                            )
+                        )
+                    );
+                });
+            });
         });
     });
 });

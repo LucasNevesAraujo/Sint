@@ -24,9 +24,11 @@ import {
  *
  * expr : relExp ((EQ | NE) relExp)* ;
  *
- * relExp : addExp ((LT | LE | GT | GE) addExp)* ;
+ * relExp : conExp ((LT | LE | GT | GE) conExp)* ;
  *
- * addExp : mulExp ((PLUS | MINUS | CONCAT) mulExp)* ;
+ * conExp : addExp ((CONCAT) addExp)* ;
+ *
+ * addExp : mulExp ((PLUS | MINUS) mulExp)* ;
  *
  * mulExp : expExp ((MULT | DIV) expExp)* ;
  *
@@ -127,15 +129,39 @@ export default class Parser
      *
      * @example <caption>Grammar:</caption>
      *
-     * relExp : addExp ((LT | LE | GT | GE) addExp)* ;
+     * relExp : conExp ((LT | LE | GT | GE) conExp)* ;
      *
      * @return {AST} Abstract Syntax tree.
      */
     relExp()
     {
-        let node = this.addExp();
+        let node = this.conExp();
 
         while ([TOKENS.LT, TOKENS.LE, TOKENS.GT, TOKENS.GE].includes(this.lookahead.type))
+        {
+            const token = this.lookahead;
+
+            this.match(token.type);
+            node = new BinOp(node, token, this.conExp());
+        }
+
+        return node;
+    }
+
+    /**
+     * Concatenation rule.
+     *
+     * @example <caption>Grammar:</caption>
+     *
+     * conExp : addExp ((CONCAT) addExp)* ;
+     *
+     * @return {AST} Abstract Syntax tree.
+     */
+    conExp()
+    {
+        let node = this.addExp();
+
+        while ([TOKENS.CONCAT].includes(this.lookahead.type))
         {
             const token = this.lookahead;
 
@@ -151,7 +177,7 @@ export default class Parser
      *
      * @example <caption>Grammar:</caption>
      *
-     * addExp : mulExp ((PLUS | MINUS | CONCAT) mulExp)* ;
+     * addExp : mulExp ((PLUS | MINUS) mulExp)* ;
      *
      * @return {AST} Abstract Syntax tree.
      */
@@ -159,7 +185,7 @@ export default class Parser
     {
         let node = this.mulExp();
 
-        while ([TOKENS.PLUS, TOKENS.MINUS, TOKENS.CONCAT].includes(this.lookahead.type))
+        while ([TOKENS.PLUS, TOKENS.MINUS].includes(this.lookahead.type))
         {
             const token = this.lookahead;
 
