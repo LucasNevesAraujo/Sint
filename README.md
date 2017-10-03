@@ -23,6 +23,8 @@ Then, to build the source, run:
 $> npm run dist
 ```
 
+After that, you can open `./example/index.html` on your browser to see some usage examples.
+
 ### How to generate the documentation ###
 
 The docs can be generated using npm:

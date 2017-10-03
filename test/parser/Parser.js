@@ -10,7 +10,7 @@ import {
     NumberConstant,
     StringConstant,
     BooleanConstant,
-} from '../../src/parser/AST';
+} from '../../src/parser/ast';
 
 describe('Parser', () =>
 {
@@ -186,12 +186,14 @@ describe('Parser', () =>
             expect(parser.parse).to.throwError();
         });
 
-        describe('operator precedence', () => {
-            describe('^', () => {
-                it('should have higher precedence than multiplication', () => {
-                    let formula;
+        describe('operator precedence', () =>
+        {
+            describe('^', () =>
+            {
+                it('should have higher precedence than multiplication', () =>
+                {
+                    const formula = `= 4 * 2 ^ 7`;
 
-                    formula = `= 4 * 2 ^ 7`;
                     expect(parseText(formula)).to.be.eql(
                         new BinOp(
                             new NumberConstant(4),

@@ -1,10 +1,12 @@
 import 'babel-polyfill';
 import * as consts from './Constants';
+import { version as VERSION } from './../package.json';
 
 export * from './parser';
 
 export {
     consts,
+    VERSION,
 };
 
 const Sint = exports; // eslint-disable-line

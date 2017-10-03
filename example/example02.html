@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <title>Spreadsheet - Sint</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Spreadsheet - Sint <small class="pull-right"><a href="./index.html"><i class="glyphicon glyphicon-chevron-left"></i>  go back</a></small></h1>
+          <p>Basic spreadsheet example, base on <a href="http://jsfiddle.net/ondras/hYfN3/">this script</a>.</p>
+          <br />
+
+          <table class="table table-bordered"></table>
+          <p class="text-right">
+            <button type="button" id="toggle" class="btn btn-default">Toggle type</button>
+            <button type="button" id="clear" class="btn btn-primary">Clear</button>
+          </p>
+
+          <ul class="list-unstyled type-list">
+            <li><div class="dot null"></div> Empty</li>
+            <li><div class="dot string"></div> String</li>
+            <li><div class="dot number"></div> Number</li>
+            <li><div class="dot boolean"></div> Boolean</li>
+            <li><div class="dot array"></div> Array</li>
+          </ul>
+          <p id="sint-version" class="text-center text-muted"></p>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .table>tbody>tr>td,
+      .table>tbody>tr>th {
+        text-align: center;
+        vertical-align: middle;
+        padding: 0px;
+      }
+      .table>tbody>tr>td span {
+        display: block;
+        padding: 8px;
+      }
+      input.form-control {
+        border: 1px solid white;
+        box-shadow: none;
+        border-radius: 0px;
+      }
+      input.form-control:hover {
+        background-color: #eee;
+      }
+      input.form-control:focus {
+        background-color: #eee;
+      }
+      input.form-control:not(:focus) {
+        text-align: right;
+      }
+      .show-types .array {
+        border-color: black;
+      }
+      .show-types .string {
+        border-color: blue;
+      }
+      .show-types .number {
+        border-color: green;
+      }
+      .show-types .boolean {
+        border-color: red;
+      }
+      .type-list {
+        display: none;
+      }
+      .show-types .type-list {
+        display: block;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        border: 1px solid #ddd;
+      }
+    </style>
+
+    <script src="../dist/sint.min.js"></script>
+    <script>
+
+      var CellGrid = function() {}
+
+      document.getElementById('sint-version').innerHTML = "Sint@" + Sint.VERSION;
+
+      CellGrid.prototype.getValue = function(cell)
+      {
+        return this.getObject(cell.name).output;
+      }
+
+      CellGrid.prototype.getRange = function(reference)
+      {
+        var range = reference.range().correct();
+        var first = range.first;
+        var last = range.last;
+        var result = [];
+
+        for (var i = first.column - 1; i < last.column; i++)
+        {
+          result[i] = [];
+
+          for (var j = first.row - 1; j < last.row; j++)
+          {
+            var column = Sint.CellIdentifier.toLetters(i + 1);
+            var row = j + 1;
+            var cell = column + row;
+            var value = this.getObject(cell).output;
+
+            result[i].push(value);
+          }
+        }
+
+        return result;
+      }
+
+      CellGrid.prototype.save = function(id, value, output, type)
+      {
+        localStorage[id] = JSON.stringify({
+          value: value,
+          output: output,
+          type: type
+        });
+      }
+
+      CellGrid.prototype.getObject = function(id)
+      {
+        if (localStorage[id])
+        {
+          return JSON.parse(localStorage[id]);
+        }
+
+        return {
+          value: '',
+          output: null,
+          type: 'null'
+        }
+      }
+
+      var interpreter = new Sint.Interpreter();
+      var table = document.querySelector('table');
+      var body = document.querySelector('body');
+      var clearButton = document.getElementById('clear');
+      var toggleButton = document.getElementById('toggle');
+      var rows = 8;
+      var cols = 6;
+      var inputs;
+      var cellGrid = new CellGrid();
+
+      function createTable(table, rows, cols)
+      {
+        for (var i = 0; i < rows + 1; i++)
+        {
+          var row = table.insertRow(-1);
+          for (var j = 0; j < cols + 1; j++)
+          {
+            var letter = String.fromCharCode('A'.charCodeAt(0) + j - 1);
+            row.insertCell(-1).innerHTML = i && j ? '<input class="form-control" id="'+ letter+i +'"/>' : '<span>' + (i || letter) + '</span>';
+          }
+        }
+      }
+
+      function setupInputs()
+      {
+        if (!inputs)
+        {
+          inputs = [].slice.call(document.querySelectorAll('input'));
+        }
+
+        inputs.forEach(function (input)
+        {
+          input.addEventListener('focus', function(e)
+          {
+            var object = cellGrid.getObject(e.target.id);
+
+            e.target.value = object.value;
+          });
+
+          input.addEventListener('blur', function(e)
+          {
+            cellGrid.save(e.target.id, input.value, interpreter.run(input.value));
+            computeAll();
+          });
+
+          input.addEventListener('keypress', function (e)
+          {
+            var key = e.which || e.keyCode;
+            if (key === 13)
+            {
+              input.blur();
+            }
+          });
+        });
+      }
+
+      function computeAll()
+      {
+        inputs.forEach(function (input)
+        {
+          var output = null;
+          var type = 'null';
+
+          if (localStorage[input.id])
+          {
+            var object = cellGrid.getObject(input.id);
+
+            output = interpreter.run(object.value);
+
+            if (output === null)
+            {
+              type = 'null';
+            }
+            else if (Array.isArray(output))
+            {
+              type = 'array';
+            }
+            else {
+              type = typeof output;
+            }
+
+            cellGrid.save(input.id, object.value, output, type);
+          }
+
+          input.value = output;
+
+          input.classList.remove('null', 'array', 'object', 'string', 'number', 'date', 'boolean');
+          input.classList.add(type);
+        });
+      }
+
+      interpreter.data = cellGrid;
+
+      clearButton.addEventListener('click', function()
+      {
+        localStorage.clear();
+        computeAll();
+      });
+
+      toggleButton.addEventListener('click', function()
+      {
+        body.classList.toggle('show-types');
+      });
+
+      createTable(table, rows, cols);
+      setupInputs();
+      computeAll();
+
+    </script>
+  </body>
+</html>
