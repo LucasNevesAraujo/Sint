@@ -1,6 +1,6 @@
 {
   "name": "sint",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "A Spreadsheet language interpreter",
   "main": "./dist/sint.min.js",
   "scripts": {
